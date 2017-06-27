@@ -1,0 +1,25 @@
+{
+  "name": "stk2k/eventstream",
+  "description": "A simple PHP pub-sub library",
+  "keywords": ["pub-sub", "PHP", "Publish-subscribe pattern"],
+  "homepage": "https://github.com/stk2k/eventstream",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Katsuki Shuto",
+      "email": "stk2k@sazysoft.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "3.7.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "EventStream\\": "src/"
+    }
+  }
+}
