@@ -73,18 +73,22 @@ class EventStream
      *
      * @param string $event
      * @param mixed $args
+     * @param boolean $flush
      *
      * @return EventStream
      *
      * @throws EventSourceIsNotPushableException, OverflowException
      */
-    public function push($event, $args=null)
+    public function push($event, $args = null, $flush = false)
     {
         if ($this->source){
             if (!$this->source->canPush($event)){
                 throw new EventSourceIsNotPushableException('event source is full');
             }
             $this->source->push($event, $args);
+            if ($flush){
+                $this->flush();
+            }
         }
         return $this;
     }
