@@ -103,6 +103,14 @@ new EventStream(new NumberEventSource(), new SimpleEventEmitter());
  
 ```
 
+## Usage
+
+1. create event stream object
+2. define your event source class and attach new instance to stream.
+3. define your event emitter or use bundled Emitter/SimpleEventEmitter class, and attach new instance to stream.
+4. define your callback and attach to stream or emitter.
+5. flush events in event source by calling EventStream#flush() method.
+
 ## Requirement
 
 PHP 5.3 or later
