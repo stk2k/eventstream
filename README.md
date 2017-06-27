@@ -5,6 +5,9 @@ You can use this library to build an application using simple pub-sub pattern.
 
 
 ```php
+
+require dirname(__FILE__) . '/vendor/autoload.php';
+ 
 use EventStream\EventStream;
 use EventStream\IEventSource;
 use EventStream\Emitter\SimpleEventEmitter;
