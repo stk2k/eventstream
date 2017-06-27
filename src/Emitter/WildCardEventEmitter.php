@@ -5,6 +5,8 @@ use EventStream\IEventEmitter;
 
 class WildCardEventEmitter extends SimpleEventEmitter implements IEventEmitter
 {
+    const PREG_METACHARS = "[]-^+*$\\.?()|!¥a¥b¥c¥d¥h¥n¥q¥w¥z¥n¥t¥0";
+    
     /**
      * get event regular expression
      *
@@ -18,21 +20,34 @@ class WildCardEventEmitter extends SimpleEventEmitter implements IEventEmitter
         if ($pos === false){
             return null;
         }
-    
-        if ($pos === 0){
-            // suffix search
-            $reg_exp = '/^.*' . preg_quote(substr($event_key,1),'/') . '$/';
+        
+        $buffer = '';
+        $reg_exp = '';
+        $length = strlen($event_key);
+        
+        for($i=0; $i<$length; $i++){
+            $c = $event_key[$i];
+            if (strpos(self::PREG_METACHARS,$c) !== false){
+                if (!empty($buffer)){
+                    $reg_exp .= preg_quote($buffer,'/');
+                    $buffer = '';
+                }
+                if ($c == '*'){
+                    $reg_exp .= '.*';
+                }
+                else{
+                    $reg_exp .= preg_quote($c,'/');;
+                }
+            }
+            else{
+                $buffer .= $c;
+            }
         }
-        elseif ($pos === strlen($event_key)-1){
-            // prefix search
-            $reg_exp = '/^' . preg_quote(substr($event_key,0,$pos),'/') . '.*$/';
-        }
-        else{
-            // partial search
-            $reg_exp = '/^' . preg_quote(substr($event_key,0,$pos),'/') . '.*' . preg_quote(substr($event_key,$pos+1),'/') . '$/';
+        if (!empty($buffer)){
+            $reg_exp .= preg_quote($buffer,'/');
         }
         
-        return $reg_exp;
+        return '/^' . $reg_exp . '$/';
     }
     
     /**

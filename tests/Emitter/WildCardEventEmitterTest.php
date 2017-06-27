@@ -28,6 +28,12 @@ class WildCardEventEmitterTest extends PHPUnit_Framework_TestCase
     
         $this->assertEquals( '/^f.*o$/', $foo_exp );
         $this->assertEquals( '/^b.*r$/', $bar_exp );
+        
+        // multiple wildcards
+        $reg_exp = $emitter->getRegExp('*.*');
+    
+        $this->assertEquals( '/^.*\..*$/', $reg_exp );
+        
     }
     
     public function testEmit()
@@ -116,5 +122,31 @@ class WildCardEventEmitterTest extends PHPUnit_Framework_TestCase
     
         $emitter->emit('_foo', 'banana');
         $this->assertEquals(3, count($foo_items) );
+    
+        $emitter->unlisten();
+    
+        // multiple wildcards
+        $foo_items = array();
+        $emitter->listen('*.*', function($_) use(&$foo_items){ $foo_items[] = $_; });
+    
+        $this->assertEquals(0, count($foo_items) );
+    
+        $emitter->emit('taxi.driver', 'banana');
+        $this->assertEquals(1, count($foo_items) );
+    
+        $emitter->emit('taxi-driver', 'banana');
+        $this->assertEquals(1, count($foo_items) );
+    
+        $emitter->emit('water.melon', 'banana');
+        $this->assertEquals(2, count($foo_items) );
+    
+        $emitter->emit('david walks around.', 'banana');
+        $this->assertEquals(3, count($foo_items) );
+    
+        $emitter->emit('..', 'banana');
+        $this->assertEquals(4, count($foo_items) );
+    
+        $emitter->emit('fruits', 'banana');
+        $this->assertEquals(4, count($foo_items) );
     }
 }

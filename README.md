@@ -106,16 +106,16 @@ new EventStream(new NumberEventSource(), new SimpleEventEmitter());
 ## Usage
 
 1. create event stream object
-2. define your event source class and attach new instance to stream.
-3. define your event emitter or use bundled Emitter/SimpleEventEmitter class, and attach new instance to stream.
-4. define your callback and attach to stream or emitter.
-5. flush events in event source by calling EventStream#flush() method.
+2. define your own event source class and attach new instance to stream.
+3. define your own event emitter or use bundled emitter classes and attach new instance to stream.
+4. define your own callback(s) and attach it(them) to stream or emitter.
+5. flush events in event source via EventStream#flush() method.
 
 ## More Examples
 
 - numbers.php: simple emitter and source sample
 - multi_channel.php: listen different channel(event)s.
-- regular_Expression.php: single bind but listen multi channels by regular expression.
+- regular_expression.php: single bind but listen multi channels by regular expression.
 - wild_card.php: single bind but listen multi channels by wild card.
 
 ## Requirement
