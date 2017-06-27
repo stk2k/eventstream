@@ -62,6 +62,8 @@ class PushableNumberEventSource extends NumberEventSource
     ->listen('number', function($n){
             echo 'received number='.$n, PHP_EOL;
         })
+    ->flush()
+    ->push('number', 'five')
     ->flush();
 echo PHP_EOL;
   
@@ -69,4 +71,5 @@ echo PHP_EOL;
 // received number=two
 // received number=three
 // received number=four
+// received number=five
 

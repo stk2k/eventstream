@@ -44,6 +44,8 @@ class MultiChannelEventSource implements IEventSource
     ->listen('animal', function($_){
             echo 'received animal='.$_, PHP_EOL;
         })
+    ->flush()
+    ->push('animal', 'panda')
     ->flush();
 echo PHP_EOL;
 
@@ -52,4 +54,5 @@ echo PHP_EOL;
 // received animal=cat
 // received fruits=banana
 // received fruits=orange
+// received animal=panda
 
