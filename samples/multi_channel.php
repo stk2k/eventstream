@@ -1,18 +1,10 @@
 <?php
 
+require dirname(dirname(__FILE__)) . '/vendor/autoload.php';
+
 use EventStream\EventStream;
 use EventStream\IEventSource;
 use EventStream\Emitter\SimpleEventEmitter;
-  
-spl_autoload_register(function($class){
-    $prefix = 'EventStream\\';
-    if (($pos=strpos($class, $prefix)) === 0) {
-        $file = dirname(__DIR__) . '/src/' . str_replace('\\', '/', substr($class, strlen($prefix))) . '.php';
-        if (file_exists($file)) {
-            require $file;
-        }
-    }
-});
 
 class MultiChannelEventSource implements IEventSource
 {
