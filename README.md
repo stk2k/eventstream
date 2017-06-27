@@ -20,9 +20,11 @@ class NumberEventSource implements IEventSource
         $this->numbers = array('one', 'two', 'three');
     }
     public function canPush($event) {
+        // you can not append event
         return false;
     }
     public function push($event, $args=null) {
+        // do nothing
         return $this;
     }
     public function next() {
@@ -51,6 +53,7 @@ echo PHP_EOL;
 class PushableNumberEventSource extends NumberEventSource
 {
     public function canPush($event) {
+        // you can append an event
         return true;
     }
     public function push($event, $args=null) {
@@ -106,7 +109,7 @@ After installing, you need to require composer's autoloader:
 require 'vendor/autoload.php';
 ```
 
-You can then later update Grasshopper using composer:
+You can then later update stk2k/eventstream by using composer-update command:
 
  ```bash
 composer.phar update
