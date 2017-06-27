@@ -3,13 +3,10 @@ namespace EventStream\Emitter;
 
 use EventStream\IEventEmitter;
 
-/**
- * Event emitter class
- */
 class SimpleEventEmitter implements IEventEmitter
 {
     /** @var array[] */
-    private $listeners;
+    protected $listeners;
     
     /**
      * get listeners
@@ -42,11 +39,16 @@ class SimpleEventEmitter implements IEventEmitter
     /**
      * remove a listener callback from event emitter
      *
-     * @param string $event
+     * @param string|null $event
      * @param callable|null $listener
      */
-    public function unlisten($event, $listener = null)
+    public function unlisten($event = null, $listener = null)
     {
+        // if event is null, remove all listeners
+        if ($event=== null){
+            $this->listeners = null;
+            return;
+        }
         // if listener parameter set null, all event specific listeners are removed
         if (!$listener){
             unset($this->listeners[$event]);
@@ -71,7 +73,7 @@ class SimpleEventEmitter implements IEventEmitter
     }
     
     /**
-     * listen event
+     * emit event
      *
      * @param string $event
      * @param mixed $args
@@ -81,7 +83,7 @@ class SimpleEventEmitter implements IEventEmitter
         $listers_of_event = isset($this->listeners[$event]) ? $this->listeners[$event] : null;
         if ($listers_of_event){
             foreach ($listers_of_event as $listener){
-                call_user_func($listener,$args);
+                call_user_func($listener,$args,$event);
             }
         }
     }

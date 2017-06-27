@@ -1,7 +1,5 @@
 <?php
 
-use EventStream\EventStream;
-use EventStream\IEventSource;
 use EventStream\Emitter\SimpleEventEmitter;
 
 function create_test_listener()
@@ -72,6 +70,15 @@ class SimpleEventEmitterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($emitter->getListeners('bar')) );
     
         $emitter->unlisten('bar');
+    
+        $this->assertEquals(0, count($emitter->getListeners()) );
+        $this->assertEquals(0, count($emitter->getListeners('foo')) );
+        $this->assertEquals(0, count($emitter->getListeners('bar')) );
+    
+        $emitter->listen('foo', $a);
+        $emitter->listen('bar', $b);
+    
+        $emitter->unlisten();
     
         $this->assertEquals(0, count($emitter->getListeners()) );
         $this->assertEquals(0, count($emitter->getListeners('foo')) );

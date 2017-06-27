@@ -17,13 +17,13 @@ interface IEventEmitter
     /**
      * remove a listener callback from event emitter
      *
-     * @param string $event
+     * @param string|null $event
      * @param callable|null $listener
      */
-    public function unlisten($event, $listener = null);
+    public function unlisten($event = null, $listener = null);
     
     /**
-     * listen event
+     * emit event
      *
      * @param string $event
      * @param mixed $args

@@ -111,6 +111,13 @@ new EventStream(new NumberEventSource(), new SimpleEventEmitter());
 4. define your callback and attach to stream or emitter.
 5. flush events in event source by calling EventStream#flush() method.
 
+## More Examples
+
+- numbers.php: simple emitter and source sample
+- multi_channel.php: listen different channel(event)s.
+- regular_Expression.php: single bind but listen multi channels by regular expression.
+- wild_card.php: single bind but listen multi channels by wild card.
+
 ## Requirement
 
 PHP 5.3 or later
