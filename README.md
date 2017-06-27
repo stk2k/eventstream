@@ -1,8 +1,27 @@
 PHP simple pub-sub library
 =======================
 
-You can use this library to build an application using simple pub-sub pattern.
+## Description
 
+You can use this library to build an application using simple pub-sub pattern.
+This library consists of three main objects below: 
+
+- EventStream
+
+event stream is frontend facade of this system. you can push events to event source, register event listeners to event emitter,
+and flush events.
+
+- EventSource
+
+event source is an event provider. it has a role to provide events when event stream request.
+you have to declare event source, and call EventStream#source() method to attach source.
+ 
+- EventEmitter
+
+event emitter is an event dispatcher. it has a role to manage user callback functions.
+use Emitter/SimpleEventEmitter class for normal use, and pass it to EventStream#emitter() method.
+
+## Demo
 
 ```php
 
@@ -78,8 +97,15 @@ echo PHP_EOL;
 // received number=two
 // received number=three
 // received number=four
-
+ 
+// eventstream can be creted with source and emitter
+new EventStream(new NumberEventSource(), new SimpleEventEmitter());
+ 
 ```
+
+## Requirement
+
+PHP 5.3 or later
 
 ## Installing Eventstream
 
@@ -120,3 +146,9 @@ Or
 ```bash
 composer update
 ```
+## License
+[MIT](https://github.com/stk2k/eventstream/blob/master/LICENSE)
+
+## Author
+
+[stk2k](https://github.com/stk2k)
