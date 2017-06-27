@@ -58,20 +58,22 @@ class WildCardEventEmitter extends SimpleEventEmitter implements IEventEmitter
      */
     public function emit($event, $args=null)
     {
-        foreach($this->listeners as $event_key => $listers_of_event){
-            if ($event_key == $event){
-                foreach ($listers_of_event as $listener){
-                    call_user_func($listener,$args,$event);
-                }
-            }
-            else {
-                $reg_exp = $this->getRegExp($event_key);
-                if ($reg_exp && preg_match($reg_exp,$event)){
+        if (is_array($this->listeners)){
+            foreach($this->listeners as $event_key => $listers_of_event){
+                if ($event_key == $event){
                     foreach ($listers_of_event as $listener){
                         call_user_func($listener,$args,$event);
                     }
                 }
+                else {
+                    $reg_exp = $this->getRegExp($event_key);
+                    if ($reg_exp && preg_match($reg_exp,$event)){
+                        foreach ($listers_of_event as $listener){
+                            call_user_func($listener,$args,$event);
+                        }
+                    }
+                }
             }
         }
-    }
+        }
 }
