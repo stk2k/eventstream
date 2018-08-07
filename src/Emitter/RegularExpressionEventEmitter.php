@@ -1,9 +1,9 @@
 <?php
 namespace EventStream\Emitter;
 
-use EventStream\IEventEmitter;
+use EventStream\EventEmitterInterface;
 
-class RegularExpressionEventEmitter extends SimpleEventEmitter implements IEventEmitter
+class RegularExpressionEventEmitter extends SimpleEventEmitter implements EventEmitterInterface
 {
     /**
      * emit event

@@ -6,7 +6,7 @@ use \EventStream\Exception\EventSourceIsNotPushableException;
 /**
  * Event source interface
  */
-interface IEventSource
+interface EventSourceInterface
 {
     /**
      * check if event source can be pushed a event
@@ -24,7 +24,7 @@ interface IEventSource
      * @param array|null $args
      *
      * @throws EventSourceIsNotPushableException, OverflowException
-     * @return IEventSource
+     * @return EventSourceInterface
      */
     public function push($event, $args=null);
     

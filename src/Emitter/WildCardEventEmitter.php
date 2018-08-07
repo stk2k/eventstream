@@ -1,9 +1,9 @@
 <?php
 namespace EventStream\Emitter;
 
-use EventStream\IEventEmitter;
+use EventStream\EventEmitterInterface;
 
-class WildCardEventEmitter extends SimpleEventEmitter implements IEventEmitter
+class WildCardEventEmitter extends SimpleEventEmitter implements EventEmitterInterface
 {
     const PREG_METACHARS = "[]-^+*$\\.?()|!¥a¥b¥c¥d¥h¥n¥q¥w¥z¥n¥t¥0";
     

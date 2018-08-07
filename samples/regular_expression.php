@@ -3,10 +3,11 @@
 require dirname(dirname(__FILE__)) . '/vendor/autoload.php';
 
 use EventStream\EventStream;
-use EventStream\IEventSource;
+use EventStream\EventSourceInterface;
 use EventStream\Emitter\RegularExpressionEventEmitter;
+use \EventStream\Exception\EventSourceIsNotPushableException;
 
-class RegularExpressionEventSource implements IEventSource
+class RegularExpressionEventSource implements EventSourceInterface
 {
     protected $events;
     
@@ -36,16 +37,19 @@ class RegularExpressionEventSource implements IEventSource
 }
   
 // listen only fruits and animal
-(new EventStream())
-    ->source(new RegularExpressionEventSource())
-    ->emitter(new RegularExpressionEventEmitter())
-    ->listen('/[hotel|user]\..*/', function($_, $event){
+try{
+    (new EventStream())
+        ->channel('my channel', new RegularExpressionEventSource(), new RegularExpressionEventEmitter())
+        ->listen('/[hotel|user]\..*/', function($_, $event){
             echo 'received ' . $event . '='.$_, PHP_EOL;
         })
-    ->flush()
-    ->push('user.age', 21)
-    ->flush();
-echo PHP_EOL;
+        ->flush()
+        ->push('user.age', 21)
+        ->flush();
+}
+catch(EventSourceIsNotPushableException $e){
+    echo 'Event not publishable: ' . $e->getMessage() . ' event: ' . $e->getEvent();
+}
 
 // received hotel.name=Tiger Hotel
 // received hotel.address=Tokyo

@@ -1,10 +1,7 @@
 <?php
 namespace EventStream;
 
-/**
- * Event emitter interface
- */
-interface IEventEmitter
+interface EventEmitterInterface
 {
     /**
      * add a listener callback to event emitter

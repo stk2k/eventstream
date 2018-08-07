@@ -1,9 +1,9 @@
 <?php
 namespace EventStream\Emitter;
 
-use EventStream\IEventEmitter;
+use EventStream\EventEmitterInterface;
 
-class SimpleEventEmitter implements IEventEmitter
+class SimpleEventEmitter implements EventEmitterInterface
 {
     /** @var array[] */
     protected $listeners;

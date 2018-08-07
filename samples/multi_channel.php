@@ -3,10 +3,11 @@
 require dirname(dirname(__FILE__)) . '/vendor/autoload.php';
 
 use EventStream\EventStream;
-use EventStream\IEventSource;
+use EventStream\EventSourceInterface;
 use EventStream\Emitter\SimpleEventEmitter;
+use \EventStream\Exception\EventSourceIsNotPushableException;
 
-class MultiChannelEventSource implements IEventSource
+class MultiChannelEventSource implements EventSourceInterface
 {
     protected $events;
     
@@ -35,19 +36,24 @@ class MultiChannelEventSource implements IEventSource
 }
   
 // listen only fruits and animal
-(new EventStream())
-    ->source(new MultiChannelEventSource())
-    ->emitter(new SimpleEventEmitter())
-    ->listen('fruits', function($_){
-            echo 'received fruits='.$_, PHP_EOL;
-        })
-    ->listen('animal', function($_){
-            echo 'received animal='.$_, PHP_EOL;
-        })
-    ->flush()
-    ->push('animal', 'panda')
-    ->flush();
-echo PHP_EOL;
+try{
+    (new EventStream())
+        ->channel('my channel')
+        ->source(new MultiChannelEventSource())
+        ->emitter(new SimpleEventEmitter())
+        ->listen('fruits', function($_){
+                echo 'received fruits='.$_, PHP_EOL;
+            })
+        ->listen('animal', function($_){
+                echo 'received animal='.$_, PHP_EOL;
+            })
+        ->flush()
+        ->push('animal', 'panda')
+        ->flush();
+}
+catch(EventSourceIsNotPushableException $e){
+    echo 'Event not publishable: ' . $e->getMessage() . ' event: ' . $e->getEvent();
+}
 
 // received fruits=apple
 // received animal=lion
