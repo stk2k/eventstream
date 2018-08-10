@@ -13,6 +13,9 @@ class EventChannel
     /** @var EventEmitterInterface|null */
     private $emitter;
 
+    /** @var bool */
+    private $auto_flush;
+
     /**
      * construct
      *
@@ -23,6 +26,7 @@ class EventChannel
     {
         $this->source = $source ? $source : new SimpleEventSource();
         $this->emitter = $emitter ? $emitter : new SimpleEventEmitter();
+        $this->auto_flush = false;
     }
 
     /**
@@ -76,20 +80,19 @@ class EventChannel
      *
      * @param string $event
      * @param mixed $args
-     * @param boolean $flush
      *
      * @return EventChannel
      *
      * @throws EventSourceIsNotPushableException, OverflowException
      */
-    public function push($event, $args = null, $flush = false)
+    public function push($event, $args = null)
     {
         if ($this->source){
             if (!$this->source->canPush($event)){
                 throw new EventSourceIsNotPushableException('Event source is full', $event, $args);
             }
             $this->source->push($event, $args);
-            if ($flush){
+            if ($this->auto_flush){
                 $this->flush();
             }
         }
@@ -133,6 +136,19 @@ class EventChannel
             return $this;
         }
         $this->emitter->listen($event, $listener);
+        return $this;
+    }
+
+    /**
+     * Update auto flush flags in all channels
+     *
+     * @param bool $auto_flush
+     *
+     * @return EventChannel
+     */
+    public function setAutoFlush($auto_flush)
+    {
+        $this->auto_flush = $auto_flush;
         return $this;
     }
 }

@@ -29,4 +29,34 @@ class EventStream
 
         return $channel;
     }
+
+    /**
+     * Update auto flush flags in all channels
+     *
+     * @param bool $auto_flush
+     *
+     * @return EventStream
+     */
+    public function setAutoFlush($auto_flush)
+    {
+        foreach($this->channel_list as $channel)
+        {
+            $channel->setAutoFlush($auto_flush);
+        }
+        return $this;
+    }
+
+    /**
+     * flush event in all channels
+     *
+     * @return EventStream
+     */
+    public function flush()
+    {
+        foreach($this->channel_list as $channel)
+        {
+            $channel->flush();
+        }
+        return $this;
+    }
 }
