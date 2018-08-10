@@ -1,10 +1,10 @@
 <?php
 
-use EventStream\EventStream;
-use EventStream\IEventSource;
+use EventStream\EventChannel;
+use EventStream\EventSourceInterface;
 use EventStream\Emitter\SimpleEventEmitter;
 
-class EventStreamTestEventSource implements IEventSource
+class EventChannelTestEventSource implements EventSourceInterface
 {
     protected $numbers;
     
@@ -29,38 +29,42 @@ class EventStreamTestEventSource implements IEventSource
     }
 }
 
-class EventStreamTest extends PHPUnit_Framework_TestCase
+class EventChannelTest extends PHPUnit_Framework_TestCase
 {
     public function testSource()
     {
-        $es = new EventStream();
-        $es->source($source=new EventStreamTestEventSource);
+        $es = new EventChannel();
+        $es->source($source=new EventChannelTestEventSource);
         
         $this->assertEquals($source, $es->getSource() );
     }
     public function testGetSource()
     {
-        $es = new EventStream();
+        $es = new EventChannel();
         
-        $this->assertNull($es->getSource());
+        $this->assertInstanceOf("EventStream\Source\SimpleEventSource",  $es->getSource());
     }
     public function testEmitter()
     {
-        $es = new EventStream();
+        $es = new EventChannel();
         $es->emitter($emitter=new SimpleEventEmitter);
         
         $this->assertEquals($emitter, $es->getEmitter());
     }
     public function testGetEmitter()
     {
-        $es = new EventStream();
-        
-        $this->assertNull( $es->getEmitter() );
+        $es = new EventChannel();
+
+        $this->assertInstanceOf("EventStream\Emitter\SimpleEventEmitter",  $es->getEmitter());
     }
+
+    /**
+     * @throws \EventStream\Exception\EventSourceIsNotPushableException
+     */
     public function testPush()
     {
-        $es = new EventStream();
-        $es->source($source=new EventStreamTestEventSource);
+        $es = new EventChannel();
+        $es->source($source=new EventChannelTestEventSource);
         
         $es->push('number', 'four');
         
@@ -72,9 +76,9 @@ class EventStreamTest extends PHPUnit_Framework_TestCase
     }
     public function testFlush()
     {
-        $es = new EventStream();
+        $es = new EventChannel();
         $es->emitter(new SimpleEventEmitter);
-        $es->source($source=new EventStreamTestEventSource);
+        $es->source($source=new EventChannelTestEventSource);
     
         $events = $source->listEents();
     
@@ -95,9 +99,9 @@ class EventStreamTest extends PHPUnit_Framework_TestCase
         $numbers = array();
         $fruits = array();
         
-        $es = new EventStream();
+        $es = new EventChannel();
         $es->emitter($emitter=new SimpleEventEmitter);
-        $es->source($source=new EventStreamTestEventSource);
+        $es->source($source=new EventChannelTestEventSource);
         $es->listen('number',function($_) use(&$numbers) {
             $numbers[] = $_;
         });

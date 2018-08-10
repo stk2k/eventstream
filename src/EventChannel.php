@@ -1,7 +1,9 @@
 <?php
 namespace EventStream;
 
+use EventStream\Emitter\SimpleEventEmitter;
 use \EventStream\Exception\EventSourceIsNotPushableException;
+use EventStream\Source\SimpleEventSource;
 
 class EventChannel
 {
@@ -17,9 +19,10 @@ class EventChannel
      * @param EventSourceInterface|null $source
      * @param EventEmitterInterface|null $emitter
      */
-    public function __construct($source=null, $emitter=null){
-        $this->source = $source;
-        $this->emitter = $emitter;
+    public function __construct($source = null, $emitter = null)
+    {
+        $this->source = $source ? $source : new SimpleEventSource();
+        $this->emitter = $emitter ? $emitter : new SimpleEventEmitter();
     }
 
     /**
