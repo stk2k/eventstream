@@ -13,15 +13,35 @@ class EventStream
      * Create channel
      *
      * @param string $channel_id
-     * @param EventSourceInterface $source
-     * @param EventEmitterInterface $emitter
+     * @param EventSourceFactoryInterface|callable $source_factory
+     * @param EventEmitterFactoryInterface|callable $emitter_factory
      *
      * @return EventChannel
      */
-    public function channel($channel_id, $source = null, $emitter = null)
+    public function channel($channel_id, $source_factory = null, $emitter_factory = null)
     {
         if (isset($this->channel_list[$channel_id])){
             return $this->channel_list[$channel_id];
+        }
+
+        $source = null;
+        if ($source_factory){
+            if (is_callable($source_factory)){
+                $source = call_user_func($source_factory);
+            }
+            else if ($source_factory instanceof EventSourceFactoryInterface){
+                $source = $source_factory->createEventSource();
+            }
+        }
+
+        $emitter = null;
+        if ($emitter_factory){
+            if (is_callable($emitter_factory)){
+                $emitter = call_user_func($emitter_factory);
+            }
+            else if ($emitter_factory instanceof EventSourceFactoryInterface){
+                $emitter = $emitter_factory->createEventEmitter();
+            }
         }
 
         $channel = new EventChannel($source, $emitter);
