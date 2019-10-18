@@ -8,6 +8,13 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          syntaxCheck="false"
+         forceCoversAnnotation="false"
+         verbose="true"
+         stopOnError="false"
+         stopOnFailure="false"
+         stopOnIncomplete="false"
+         stopOnSkipped="false"
+         stopOnRisky="false"
          bootstrap="test/bootstrap.php"
 >
     <testsuites>
@@ -15,6 +22,17 @@
             <directory>./test/</directory>
         </testsuite>
     </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./src</directory>
+            <exclude>
+                <directory>./demo</directory>
+                <directory>./vendor</directory>
+                <directory suffix="Interface.php">./src</directory>
+            </exclude>
+        </whitelist>
+    </filter>
 
     <filter>
         <whitelist>
