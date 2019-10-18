@@ -134,45 +134,21 @@ catch(EventSourceIsNotPushableException $e){
 
 PHP 7.0 or later
 
-## Installing Eventstream
+## Installing stk2k/eventstream
 
-The recommended way to install this library is through
+The recommended way to install Calgamo/Bench is through
 [Composer](http://getcomposer.org).
-
-```bash
-# Install Composer
-curl -sS https://getcomposer.org/installer | php
-```
-
-Next, run the Composer command to install the latest stable version:
-
-```bash
-composer.phar require stk2k/eventstream
-```
-
-Or
 
 ```bash
 composer require stk2k/eventstream
 ```
 
-After installing, you need to require composer's autoloader:
+After installing, you need to require Composer's autoloader:
 
 ```php
 require 'vendor/autoload.php';
 ```
 
-You can then later update stk2k/eventstream by using composer-update command:
-
- ```bash
-composer.phar update
- ```
-
-Or
-
-```bash
-composer update
-```
 ## License
 [MIT](https://github.com/stk2k/eventstream/blob/master/LICENSE)
 
