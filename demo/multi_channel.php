@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpUnusedParameterInspection */
 require 'include/autoload.php';
 
 use Stk2k\EventStream\EventStream;
@@ -11,22 +12,22 @@ class MultiChannelEventSource implements EventSourceInterface
     protected $events;
     
     public function __construct() {
-        $this->events = array(
-            array('fruits', 'apple'),
-            array('number', 'three'),
-            array('animal', 'lion'),
-            array('animal', 'cat'),
-            array('number', 'two'),
-            array('number', 'one'),
-            array('fruits', 'banana'),
-            array('fruits', 'orange'),
-        );
+        $this->events = [
+            ['fruits', 'apple'],
+            ['number', 'three'],
+            ['animal', 'lion'],
+            ['animal', 'cat'],
+            ['number', 'two'],
+            ['number', 'one'],
+            ['fruits', 'banana'],
+            ['fruits', 'orange'],
+        ];
     }
     public function canPush(string $event) {
         return true;
     }
     public function push(string $event, $args=null) {
-        $this->events[] = array($event, $args);
+        $this->events[] = [$event, $args];
         return $this;
     }
     public function next() {

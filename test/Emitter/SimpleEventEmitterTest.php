@@ -1,5 +1,6 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use Stk2k\EventStream\Emitter\SimpleEventEmitter;
 
 function create_test_listener()
@@ -9,7 +10,7 @@ function create_test_listener()
     };
 }
 
-class SimpleEventEmitterTest extends PHPUnit_Framework_TestCase
+class SimpleEventEmitterTest extends TestCase
 {
     public function testGetListeners()
     {

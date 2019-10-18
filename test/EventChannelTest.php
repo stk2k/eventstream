@@ -1,5 +1,6 @@
 <?php /** @noinspection PhpUnusedParameterInspection */
 
+use PHPUnit\Framework\TestCase;
 use Stk2k\EventStream\EventChannel;
 use Stk2k\EventStream\EventSourceInterface;
 use Stk2k\EventStream\Emitter\SimpleEventEmitter;
@@ -10,7 +11,7 @@ class EventChannelTestEventSource implements EventSourceInterface
     protected $numbers;
     
     public function __construct() {
-        $this->numbers = array('one', 'two', 'three');
+        $this->numbers = ['one', 'two', 'three'];
     }
     public function canPush(string $event) {
         return true;
@@ -23,14 +24,14 @@ class EventChannelTestEventSource implements EventSourceInterface
     }
     public function next() {
         $number = array_shift($this->numbers);
-        return $number ? array('number',$number) : null;
+        return $number ? ['number',$number] : null;
     }
     public function listEents() {
         return array_values($this->numbers);
     }
 }
 
-class EventChannelTest extends PHPUnit_Framework_TestCase
+class EventChannelTest extends TestCase
 {
     public function testSource()
     {

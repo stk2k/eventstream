@@ -11,23 +11,23 @@ class RegularExpressionEventSource implements EventSourceInterface
     protected $events;
     
     public function __construct() {
-        $this->events = array(
-            array('hotel.name', 'Tiger Hotel'),
-            array('hotel.address', 'Tokyo'),
-            array('hotel.phone_number', '0123456789'),
-            array('user.name', 'satou tarou'),
-            array('user.phone_number', '987654321'),
-            array('user.address', 'Fukuoka'),
-            array('company.name', 'ABC company'),
-            array('company.phone_number', '000011112222'),
-            array('company.address', 'Osaka'),
-        );
+        $this->events = [
+            ['hotel.name', 'Tiger Hotel'],
+            ['hotel.address', 'Tokyo'],
+            ['hotel.phone_number', '0123456789'],
+            ['user.name', 'satou tarou'],
+            ['user.phone_number', '987654321'],
+            ['user.address', 'Fukuoka'],
+            ['company.name', 'ABC company'],
+            ['company.phone_number', '000011112222'],
+            ['company.address', 'Osaka'],
+        ];
     }
     public function canPush(string $event) {
         return true;
     }
     public function push(string $event, $args=null) {
-        $this->events[] = array($event, $args);
+        $this->events[] = [$event, $args];
         return $this;
     }
     public function next() {

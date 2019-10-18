@@ -1,8 +1,9 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use Stk2k\EventStream\Emitter\RegularExpressionEventEmitter;
 
-class RegularExpressionEventEmitterTest extends PHPUnit_Framework_TestCase
+class RegularExpressionEventEmitterTest extends TestCase
 {
     public function testEmit()
     {

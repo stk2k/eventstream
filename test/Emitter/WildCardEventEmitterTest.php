@@ -1,8 +1,9 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use Stk2k\EventStream\Emitter\WildCardEventEmitter;
 
-class WildCardEventEmitterTest extends PHPUnit_Framework_TestCase
+class WildCardEventEmitterTest extends TestCase
 {
     public function testGetRegExp()
     {
