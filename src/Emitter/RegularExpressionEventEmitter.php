@@ -1,7 +1,7 @@
 <?php
-namespace EventStream\Emitter;
+namespace Stk2k\EventStream\Emitter;
 
-use EventStream\EventEmitterInterface;
+use Stk2k\EventStream\EventEmitterInterface;
 
 class RegularExpressionEventEmitter extends SimpleEventEmitter implements EventEmitterInterface
 {
@@ -11,13 +11,13 @@ class RegularExpressionEventEmitter extends SimpleEventEmitter implements EventE
      * @param string $event
      * @param mixed $args
      */
-    public function emit($event, $args=null)
+    public function emit(string $event, $args = null)
     {
         if (is_array($this->listeners)){
             foreach($this->listeners as $reg_exp => $listers_of_event){
                 if (preg_match($reg_exp,$event)){
                     foreach ($listers_of_event as $listener){
-                        call_user_func($listener,$args,$event);
+                        call_user_func($listener,$event,$args);
                     }
                 }
             }

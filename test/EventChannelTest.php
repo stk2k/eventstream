@@ -1,8 +1,9 @@
-<?php
+<?php /** @noinspection PhpUnusedParameterInspection */
 
-use EventStream\EventChannel;
-use EventStream\EventSourceInterface;
-use EventStream\Emitter\SimpleEventEmitter;
+use Stk2k\EventStream\EventChannel;
+use Stk2k\EventStream\EventSourceInterface;
+use Stk2k\EventStream\Emitter\SimpleEventEmitter;
+use Stk2k\EventStream\Source\SimpleEventSource;
 
 class EventChannelTestEventSource implements EventSourceInterface
 {
@@ -11,10 +12,10 @@ class EventChannelTestEventSource implements EventSourceInterface
     public function __construct() {
         $this->numbers = array('one', 'two', 'three');
     }
-    public function canPush($event) {
+    public function canPush(string $event) {
         return true;
     }
-    public function push($event, $args=null) {
+    public function push(string $event, $args=null) {
         if ($event==='number'){
             $this->numbers[] = $args;
         }
@@ -42,7 +43,7 @@ class EventChannelTest extends PHPUnit_Framework_TestCase
     {
         $es = new EventChannel();
         
-        $this->assertInstanceOf("EventStream\Source\SimpleEventSource",  $es->getSource());
+        $this->assertInstanceOf(SimpleEventSource::class,  $es->getSource());
     }
     public function testEmitter()
     {
@@ -55,11 +56,11 @@ class EventChannelTest extends PHPUnit_Framework_TestCase
     {
         $es = new EventChannel();
 
-        $this->assertInstanceOf("EventStream\Emitter\SimpleEventEmitter",  $es->getEmitter());
+        $this->assertInstanceOf(SimpleEventEmitter::class,  $es->getEmitter());
     }
 
     /**
-     * @throws \EventStream\Exception\EventSourceIsNotPushableException
+     * @throws
      */
     public function testPush()
     {
@@ -102,11 +103,11 @@ class EventChannelTest extends PHPUnit_Framework_TestCase
         $es = new EventChannel();
         $es->emitter($emitter=new SimpleEventEmitter);
         $es->source($source=new EventChannelTestEventSource);
-        $es->listen('number',function($_) use(&$numbers) {
-            $numbers[] = $_;
+        $es->listen('number',function($_, $arg) use(&$numbers) {
+            $numbers[] = $arg;
         });
-        $es->listen('fruits',function($_) use(&$fruits) {
-            $fruits[] = $_;
+        $es->listen('fruits',function($_, $arg) use(&$fruits) {
+            $fruits[] = $arg;
         });
         $es->flush();
     

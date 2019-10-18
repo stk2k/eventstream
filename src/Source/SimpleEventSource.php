@@ -1,7 +1,7 @@
 <?php
-namespace EventStream\Source;
+namespace Stk2k\EventStream\Source;
 
-use EventStream\EventSourceInterface;
+use Stk2k\EventStream\EventSourceInterface;
 
 class SimpleEventSource implements EventSourceInterface
 {
@@ -15,7 +15,7 @@ class SimpleEventSource implements EventSourceInterface
      *
      * @return bool     true if pushable, false if the event store can not be pushed
      */
-    public function canPush($event)
+    public function canPush(string $event) : bool
     {
         return true;
     }
@@ -24,11 +24,11 @@ class SimpleEventSource implements EventSourceInterface
      * store event
      *
      * @param string $event
-     * @param array|null $args
+     * @param mixed $args
      *
      * @return EventSourceInterface
      */
-    public function push($event, $args=null)
+    public function push(string $event, $args=null) : EventSourceInterface
     {
         $this->queue[] = [
             $event, $args

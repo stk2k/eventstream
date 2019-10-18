@@ -37,10 +37,10 @@ class NumberEventSource implements EventSourceInterface
     public function __construct() {
         $this->numbers = array('one', 'two', 'three');
     }
-    public function canPush($event) {
+    public function canPush(string $event) {
         return false;
     }
-    public function push($event, $args=null) {
+    public function push(string $event, $args=null) {
         return $this;
     }
     public function next() {
@@ -72,10 +72,10 @@ catch(EventSourceIsNotPushableException $e){
   
 class PushableNumberEventSource extends NumberEventSource
 {
-    public function canPush($event) {
+    public function canPush(string $event) {
         return true;
     }
-    public function push($event, $args=null) {
+    public function push(string $event, $args=null) {
         if ($event==='number'){
             $this->numbers[] = $args;
         }
@@ -125,7 +125,7 @@ catch(EventSourceIsNotPushableException $e){
 
 ## Requirement
 
-PHP 5.4 or later
+PHP 7.0 or later
 
 ## Installing Eventstream
 

@@ -1,11 +1,10 @@
 <?php
+require 'include/autoload.php';
 
-require dirname(dirname(__FILE__)) . '/vendor/autoload.php';
-
-use EventStream\EventStream;
-use EventStream\EventSourceInterface;
-use EventStream\Emitter\SimpleEventEmitter;
-use \EventStream\Exception\EventSourceIsNotPushableException;
+use Stk2k\EventStream\EventStream;
+use Stk2k\EventStream\EventSourceInterface;
+use Stk2k\EventStream\Emitter\SimpleEventEmitter;
+use Stk2k\EventStream\Exception\EventSourceIsNotPushableException;
 
 class MultiChannelEventSource implements EventSourceInterface
 {
@@ -23,10 +22,10 @@ class MultiChannelEventSource implements EventSourceInterface
             array('fruits', 'orange'),
         );
     }
-    public function canPush($event) {
+    public function canPush(string $event) {
         return true;
     }
-    public function push($event, $args=null) {
+    public function push(string $event, $args=null) {
         $this->events[] = array($event, $args);
         return $this;
     }
@@ -41,13 +40,12 @@ try{
         ->channel('my channel')
         ->source(new MultiChannelEventSource())
         ->emitter(new SimpleEventEmitter())
-        ->listen('fruits', function($_){
-                echo 'received fruits='.$_, PHP_EOL;
+        ->listen('fruits', function($event, $args){
+                echo 'received fruits='.$args, PHP_EOL;
             })
-        ->listen('animal', function($_){
-                echo 'received animal='.$_, PHP_EOL;
+        ->listen('animal', function($event, $args){
+                echo 'received animal='.$args, PHP_EOL;
             })
-        ->flush()
         ->push('animal', 'panda')
         ->flush();
 }

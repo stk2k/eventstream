@@ -1,16 +1,18 @@
 <?php
-namespace EventStream;
+namespace Stk2k\EventStream;
 
-use EventStream\Emitter\SimpleEventEmitter;
-use \EventStream\Exception\EventSourceIsNotPushableException;
-use EventStream\Source\SimpleEventSource;
+use \RuntimeException;
+
+use Stk2k\EventStream\Emitter\SimpleEventEmitter;
+use Stk2k\EventStream\Exception\EventSourceIsNotPushableException;
+use Stk2k\EventStream\Source\SimpleEventSource;
 
 class EventChannel
 {
-    /** @var EventSourceInterface|null */
+    /** @var EventSourceInterface */
     private $source;
     
-    /** @var EventEmitterInterface|null */
+    /** @var EventEmitterInterface */
     private $emitter;
 
     /** @var bool */
@@ -19,10 +21,10 @@ class EventChannel
     /**
      * construct
      *
-     * @param EventSourceInterface|null $source
-     * @param EventEmitterInterface|null $emitter
+     * @param EventSourceInterface $source
+     * @param EventEmitterInterface $emitter
      */
-    public function __construct($source = null, $emitter = null)
+    public function __construct(EventSourceInterface $source = null, EventEmitterInterface $emitter = null)
     {
         $this->source = $source ? $source : new SimpleEventSource();
         $this->emitter = $emitter ? $emitter : new SimpleEventEmitter();
@@ -32,11 +34,11 @@ class EventChannel
     /**
      * change event source
      *
-     * @param EventSourceInterface|null $source
+     * @param EventSourceInterface $source
      *
      * @return EventChannel
      */
-    public function source($source)
+    public function source(EventSourceInterface $source) : self
     {
         $this->source = $source;
         return $this;
@@ -45,9 +47,9 @@ class EventChannel
     /**
      * get event source
      *
-     * @return EventSourceInterface|null
+     * @return EventSourceInterface
      */
-    public function getSource()
+    public function getSource() : EventSourceInterface
     {
         return $this->source;
     }
@@ -55,11 +57,11 @@ class EventChannel
     /**
      * change event emitter
      *
-     * @param EventEmitterInterface|null $emitter
+     * @param EventEmitterInterface $emitter
      *
      * @return EventChannel
      */
-    public function emitter($emitter)
+    public function emitter($emitter) : self
     {
         $this->emitter = $emitter;
         return $this;
@@ -68,9 +70,9 @@ class EventChannel
     /**
      * get event emitter
      *
-     * @return EventEmitterInterface|null
+     * @return EventEmitterInterface
      */
-    public function getEmitter()
+    public function getEmitter() : EventEmitterInterface
     {
         return $this->emitter;
     }
@@ -85,7 +87,7 @@ class EventChannel
      *
      * @throws EventSourceIsNotPushableException, OverflowException
      */
-    public function push($event, $args = null)
+    public function push(string $event, $args = null) : self
     {
         if ($this->source){
             if (!$this->source->canPush($event)){
@@ -117,7 +119,7 @@ class EventChannel
                 $this->emitter->emit($event, $args);
             }
             elseif ($e!==null){
-                throw new \DomainException('datasource returns invalid event:' . print_r($e,true));
+                throw new RuntimeException('datasource returns invalid event:' . print_r($e,true));
             }
         }
         return $this;
@@ -131,7 +133,8 @@ class EventChannel
      *
      * @return EventChannel
      */
-    public function listen($event, $listener){
+    public function listen(string $event, callable $listener) : self
+    {
         if (!$this->emitter){
             return $this;
         }
@@ -146,7 +149,7 @@ class EventChannel
      *
      * @return EventChannel
      */
-    public function setAutoFlush($auto_flush)
+    public function setAutoFlush(bool $auto_flush) : self
     {
         $this->auto_flush = $auto_flush;
         return $this;

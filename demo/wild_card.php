@@ -1,13 +1,12 @@
 <?php
+require 'include/autoload.php';
 
-require dirname(dirname(__FILE__)) . '/vendor/autoload.php';
+use Stk2k\EventStream\EventStream;
+use Stk2k\EventStream\EventSourceInterface;
+use Stk2k\EventStream\Emitter\WildCardEventEmitter;
+use Stk2k\EventStream\Exception\EventSourceIsNotPushableException;
 
-use EventStream\EventStream;
-use EventStream\EventSourceInterface;
-use EventStream\Emitter\RegularExpressionEventEmitter;
-use \EventStream\Exception\EventSourceIsNotPushableException;
-
-class RegularExpressionEventSource implements EventSourceInterface
+class WildCardEventSource implements EventSourceInterface
 {
     protected $events;
     
@@ -19,15 +18,12 @@ class RegularExpressionEventSource implements EventSourceInterface
             array('user.name', 'satou tarou'),
             array('user.phone_number', '987654321'),
             array('user.address', 'Fukuoka'),
-            array('company.name', 'ABC company'),
-            array('company.phone_number', '000011112222'),
-            array('company.address', 'Osaka'),
         );
     }
-    public function canPush($event) {
+    public function canPush(string $event) {
         return true;
     }
-    public function push($event, $args=null) {
+    public function push(string $event, $args=null) {
         $this->events[] = array($event, $args);
         return $this;
     }
@@ -39,11 +35,13 @@ class RegularExpressionEventSource implements EventSourceInterface
 // listen only fruits and animal
 try{
     (new EventStream())
-        ->channel('my channel', new RegularExpressionEventSource(), new RegularExpressionEventEmitter())
-        ->listen('/[hotel|user]\..*/', function($_, $event){
-            echo 'received ' . $event . '='.$_, PHP_EOL;
+        ->channel('my channel', new WildCardEventSource(), new WildCardEventEmitter())
+        ->listen('user.*', function($event, $args){
+            echo 'received ' . $event . '='.$args, PHP_EOL;
         })
-        ->flush()
+        ->listen('*.address', function($event, $args){
+            echo 'received ' . $event . '='.$args, PHP_EOL;
+        })
         ->push('user.age', 21)
         ->flush();
 }
@@ -51,11 +49,10 @@ catch(EventSourceIsNotPushableException $e){
     echo 'Event not publishable: ' . $e->getMessage() . ' event: ' . $e->getEvent();
 }
 
-// received hotel.name=Tiger Hotel
 // received hotel.address=Tokyo
-// received hotel.phone_number=0123456789
 // received user.name=satou tarou
 // received user.phone_number=987654321
+// received user.address=Fukuoka
 // received user.address=Fukuoka
 // received user.age=21
 

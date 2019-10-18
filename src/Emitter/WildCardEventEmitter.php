@@ -1,7 +1,7 @@
 <?php
-namespace EventStream\Emitter;
+namespace Stk2k\EventStream\Emitter;
 
-use EventStream\EventEmitterInterface;
+use Stk2k\EventStream\EventEmitterInterface;
 
 class WildCardEventEmitter extends SimpleEventEmitter implements EventEmitterInterface
 {
@@ -56,20 +56,20 @@ class WildCardEventEmitter extends SimpleEventEmitter implements EventEmitterInt
      * @param string $event
      * @param mixed $args
      */
-    public function emit($event, $args=null)
+    public function emit(string $event, $args = null)
     {
         if (is_array($this->listeners)){
             foreach($this->listeners as $event_key => $listers_of_event){
                 if ($event_key == $event){
                     foreach ($listers_of_event as $listener){
-                        call_user_func($listener,$args,$event);
+                        call_user_func($listener,$event,$args);
                     }
                 }
                 else {
                     $reg_exp = $this->getRegExp($event_key);
                     if ($reg_exp && preg_match($reg_exp,$event)){
                         foreach ($listers_of_event as $listener){
-                            call_user_func($listener,$args,$event);
+                            call_user_func($listener,$event,$args);
                         }
                     }
                 }

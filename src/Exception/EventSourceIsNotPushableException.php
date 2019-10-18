@@ -1,7 +1,10 @@
 <?php
-namespace EventStream\Exception;
+namespace Stk2k\EventStream\Exception;
 
-class EventSourceIsNotPushableException extends \Exception
+use Exception;
+use Throwable;
+
+class EventSourceIsNotPushableException extends Exception
 {
     private $event;
     private $args;
@@ -12,9 +15,9 @@ class EventSourceIsNotPushableException extends \Exception
      * @param string $message
      * @param string $event
      * @param mixed $args
-     * @param \Throwable|null $previous
+     * @param Throwable|null $previous
      */
-    public function __construct($message, $event, $args, \Throwable $previous = null)
+    public function __construct(string $message, string $event, $args, Throwable $previous = null)
     {
         parent::__construct($message, 0, $previous);
 

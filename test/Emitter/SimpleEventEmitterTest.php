@@ -1,6 +1,6 @@
 <?php
 
-use EventStream\Emitter\SimpleEventEmitter;
+use Stk2k\EventStream\Emitter\SimpleEventEmitter;
 
 function create_test_listener()
 {
@@ -87,20 +87,20 @@ class SimpleEventEmitterTest extends PHPUnit_Framework_TestCase
     public function testEmit()
     {
         $emitter = new SimpleEventEmitter();
-        
-        $foo_items = array();
-        $emitter->listen('foo', function($_) use(&$foo_items){ $foo_items[] = $_; });
-        
-        $this->assertEquals(0, count($foo_items) );
+
+        $events = [];
+        $args = [];
+        $emitter->listen('foo', function($event, $arg) use(&$events, &$args){ $events[] = $event; $args[] = $arg; });
+
+        $this->assertEquals([], $events );
+        $this->assertEquals([], $args );
         
         $emitter->emit('bar', 'banana');
-        
-        $this->assertEquals(0, count($foo_items) );
+        $this->assertEquals([], $events );
+        $this->assertEquals([], $args );
     
         $emitter->emit('foo', 'banana');
-    
-        $this->assertEquals(1, count($foo_items) );
-        $this->assertEquals('banana', reset($foo_items) );
-        $this->assertEquals('banana', end($foo_items) );
+        $this->assertEquals(['foo'], $events );
+        $this->assertEquals(['banana'], $args );
     }
 }

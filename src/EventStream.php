@@ -1,5 +1,5 @@
 <?php
-namespace EventStream;
+namespace Stk2k\EventStream;
 
 /**
  * Event dispatcher class
@@ -13,35 +13,15 @@ class EventStream
      * Create channel
      *
      * @param string $channel_id
-     * @param EventSourceFactoryInterface|callable $source_factory
-     * @param EventEmitterFactoryInterface|callable $emitter_factory
+     * @param EventSourceInterface $source
+     * @param EventEmitterInterface $emitter
      *
      * @return EventChannel
      */
-    public function channel($channel_id, $source_factory = null, $emitter_factory = null)
+    public function channel(string $channel_id, EventSourceInterface $source = null, EventEmitterInterface $emitter = null) : EventChannel
     {
         if (isset($this->channel_list[$channel_id])){
             return $this->channel_list[$channel_id];
-        }
-
-        $source = null;
-        if ($source_factory){
-            if (is_callable($source_factory)){
-                $source = call_user_func($source_factory);
-            }
-            else if ($source_factory instanceof EventSourceFactoryInterface){
-                $source = $source_factory->createEventSource();
-            }
-        }
-
-        $emitter = null;
-        if ($emitter_factory){
-            if (is_callable($emitter_factory)){
-                $emitter = call_user_func($emitter_factory);
-            }
-            else if ($emitter_factory instanceof EventSourceFactoryInterface){
-                $emitter = $emitter_factory->createEventEmitter();
-            }
         }
 
         $channel = new EventChannel($source, $emitter);
@@ -57,7 +37,7 @@ class EventStream
      *
      * @return EventStream
      */
-    public function setAutoFlush($auto_flush)
+    public function setAutoFlush(bool $auto_flush) : self
     {
         foreach($this->channel_list as $channel)
         {
@@ -71,7 +51,7 @@ class EventStream
      *
      * @return EventStream
      */
-    public function flush()
+    public function flush() : self
     {
         foreach($this->channel_list as $channel)
         {

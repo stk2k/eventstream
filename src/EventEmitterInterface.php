@@ -1,5 +1,5 @@
 <?php
-namespace EventStream;
+namespace Stk2k\EventStream;
 
 interface EventEmitterInterface
 {
@@ -9,7 +9,7 @@ interface EventEmitterInterface
      * @param string $event
      * @param callable $listener
      */
-    public function listen($event, $listener);
+    public function listen(string $event, callable $listener);
     
     /**
      * remove a listener callback from event emitter
@@ -17,7 +17,7 @@ interface EventEmitterInterface
      * @param string|null $event
      * @param callable|null $listener
      */
-    public function unlisten($event = null, $listener = null);
+    public function unlisten(string $event = null, callable $listener = null);
     
     /**
      * emit event
@@ -25,5 +25,5 @@ interface EventEmitterInterface
      * @param string $event
      * @param mixed $args
      */
-    public function emit($event, $args=null);
+    public function emit(string $event, $args = null);
 }

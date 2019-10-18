@@ -1,7 +1,7 @@
 <?php
-namespace EventStream;
+namespace Stk2k\EventStream;
 
-use \EventStream\Exception\EventSourceIsNotPushableException;
+use Stk2k\EventStream\Exception\EventSourceIsNotPushableException;
 
 /**
  * Event source interface
@@ -15,18 +15,18 @@ interface EventSourceInterface
      *
      * @return bool     true if pushable, false if the event store can not be pushed
      */
-    public function canPush($event);
+    public function canPush(string $event);
     
     /**
      * store event
      *
      * @param string $event
-     * @param array|null $args
+     * @param mixed $args
      *
      * @throws EventSourceIsNotPushableException, OverflowException
      * @return EventSourceInterface
      */
-    public function push($event, $args=null);
+    public function push(string $event, $args = null);
     
     /**
      * generate next event

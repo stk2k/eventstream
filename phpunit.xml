@@ -8,11 +8,11 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          syntaxCheck="false"
-         bootstrap="tests/bootstrap.php"
+         bootstrap="test/bootstrap.php"
 >
     <testsuites>
         <testsuite name="EventStream Tests">
-            <directory>./tests/</directory>
+            <directory>./test/</directory>
         </testsuite>
     </testsuites>
 

@@ -1,11 +1,11 @@
 <?php
-namespace EventStream\Emitter;
+namespace Stk2k\EventStream\Emitter;
 
-use EventStream\EventEmitterInterface;
+use Stk2k\EventStream\EventEmitterInterface;
 
 class SimpleEventEmitter implements EventEmitterInterface
 {
-    /** @var array[] */
+    /** @var callable[][] */
     protected $listeners;
     
     /**
@@ -13,13 +13,14 @@ class SimpleEventEmitter implements EventEmitterInterface
      *
      * @param string|null $event
      *
-     * @return array[]
+     * @return callable[]
      */
-    public function getListeners($event = null){
+    public function getListeners(string $event = null) : array
+    {
         if (!$event){
-            return $this->listeners;
+            return $this->listeners ?? [];
         }
-        return isset($this->listeners[$event]) ? $this->listeners[$event] : null;
+        return isset($this->listeners[$event]) ? $this->listeners[$event] : [];
     }
     
     /**
@@ -28,7 +29,7 @@ class SimpleEventEmitter implements EventEmitterInterface
      * @param string $event
      * @param callable $listener
      */
-    public function listen($event,$listener){
+    public function listen(string $event, callable $listener){
         $listers_of_event = isset($this->listeners[$event]) ? $this->listeners[$event] : array();
         if (!in_array($listener,$listers_of_event,true)){
             $listers_of_event[] = $listener;
@@ -42,7 +43,7 @@ class SimpleEventEmitter implements EventEmitterInterface
      * @param string|null $event
      * @param callable|null $listener
      */
-    public function unlisten($event = null, $listener = null)
+    public function unlisten(string $event = null, callable $listener = null)
     {
         // if event is null, remove all listeners
         if ($event=== null){
@@ -78,12 +79,12 @@ class SimpleEventEmitter implements EventEmitterInterface
      * @param string $event
      * @param mixed $args
      */
-    public function emit($event, $args=null)
+    public function emit(string $event, $args = null)
     {
         $listers_of_event = isset($this->listeners[$event]) ? $this->listeners[$event] : null;
         if ($listers_of_event){
             foreach ($listers_of_event as $listener){
-                call_user_func($listener,$args,$event);
+                call_user_func($listener,$event,$args);
             }
         }
     }
