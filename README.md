@@ -1,6 +1,13 @@
 PHP simple pub-sub library
 =======================
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/stk2k/eventstream.svg?style=flat-square)](https://packagist.org/packages/stk2k/eventstream)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Build Status](https://travis-ci.org/stk2k/eventstream.svg?branch=master)](https://travis-ci.org/stk2k/eventstream)
+[![Coverage Status](https://coveralls.io/repos/github/stk2k/eventstream/badge.svg?branch=master)](https://coveralls.io/github/stk2k/eventstream?branch=master)
+[![Code Climate](https://codeclimate.com/github/stk2k/eventstream/badges/gpa.svg)](https://codeclimate.com/github/stk2k/eventstream)
+[![Total Downloads](https://img.shields.io/packagist/dt/stk2k/eventstream.svg?style=flat-square)](https://packagist.org/packages/stk2k/eventstream)
+
 ## Description
 
 You can use this library to build an application using simple pub-sub pattern.
