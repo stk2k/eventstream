@@ -1,10 +1,11 @@
 <?php
-require 'include/autoload.php';
+require dirname(__DIR__) . '/vendor/autoload.php';
 
 use Stk2k\EventStream\EventStream;
 use Stk2k\EventStream\EventSourceInterface;
 use Stk2k\EventStream\Emitter\SimpleEventEmitter;
 use Stk2k\EventStream\Exception\EventSourceIsNotPushableException;
+use Stk2k\EventStream\Event;
 
 echo PHP_EOL . 'Number event source demo:' . PHP_EOL;
 
@@ -15,23 +16,23 @@ class NumberEventSource implements EventSourceInterface
     public function __construct() {
         $this->numbers = array('one', 'two', 'three');
     }
-    public function canPush(string $event) {
+    public function canPush() : bool {
         return false;
     }
-    public function push(string $event, $args=null) {
+    public function push(Event $e) : EventSourceInterface {
         return $this;
     }
     public function next() {
         $number = array_shift($this->numbers);
-        return $number ? array('number',$number) : null;
+        return $number ? new Event('number',$number) : null;
     }
 }
   
 // create event stream and setup callback, then flush all events
 (new EventStream())
     ->channel('my channel', new NumberEventSource(), new SimpleEventEmitter())
-    ->listen('number', function($event, $n){
-        echo 'received number='.$n, PHP_EOL;
+    ->listen('number', function(Event $e){
+        echo 'received number='.$e->getPayload(), PHP_EOL;
     })
     ->flush();
 
@@ -42,22 +43,22 @@ class NumberEventSource implements EventSourceInterface
 
 // you can not push event to unpushable event source
 try{
-    (new NumberEventSource())->push('number','four');   // throws EventSourceIsNotPushableException
+    (new NumberEventSource())->push(new Event('number','four'));   // throws EventSourceIsNotPushableException
 }
 catch(EventSourceIsNotPushableException $e){
-    echo 'Event not publishable: ' . $e->getMessage() . ' event: ' . $e->getEvent();
+    echo 'Event not publishable.';
 }
 
 echo PHP_EOL . 'Pushable event source demo:' . PHP_EOL;
 
 class PushableNumberEventSource extends NumberEventSource
 {
-    public function canPush(string $event) {
+    public function canPush() : bool {
         return true;
     }
-    public function push(string $event, $args=null) {
-        if ($event==='number'){
-            $this->numbers[] = $args;
+    public function push(Event $e) : EventSourceInterface {
+        if ($e->getName() === 'number'){
+            $this->numbers[] = $e->getPayload();
         }
         return $this;
     }
@@ -67,17 +68,17 @@ class PushableNumberEventSource extends NumberEventSource
 try{
     (new EventStream())
         ->channel('my channel')
-        ->source((new PushableNumberEventSource())->push('number','four'))
+        ->source((new PushableNumberEventSource())->push(new Event('number','four')))
         ->emitter(new SimpleEventEmitter())
-        ->listen('number', function($event, $n){
-                echo 'received number='.$n, PHP_EOL;
+        ->listen('number', function(Event $e){
+                echo 'received number='.$e->getPayload(), PHP_EOL;
             })
         ->flush()
-        ->push('number', 'five')
+        ->push(new Event('number', 'five'))
         ->flush();
 }
 catch(EventSourceIsNotPushableException $e){
-    echo 'Event not publishable: ' . $e->getMessage() . ' event: ' . $e->getEvent();
+    echo 'Event not publishable.';
 }
 
 // Pushable event source demo:

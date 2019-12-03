@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
+
 namespace Stk2k\EventStream\Emitter;
 
+use Stk2k\EventStream\Event;
 use Stk2k\EventStream\EventEmitterInterface;
 
 class SimpleEventEmitter implements EventEmitterInterface
@@ -72,19 +75,16 @@ class SimpleEventEmitter implements EventEmitterInterface
             }
         }
     }
-    
+
     /**
-     * emit event
-     *
-     * @param string $event
-     * @param mixed $args
+     * {@inheritDoc}
      */
-    public function emit(string $event, $args = null)
+    public function emit(Event $event)
     {
-        $listers_of_event = isset($this->listeners[$event]) ? $this->listeners[$event] : null;
+        $listers_of_event = $this->listeners[$event->getName()] ?? null;
         if ($listers_of_event){
             foreach ($listers_of_event as $listener){
-                call_user_func($listener,$event,$args);
+                call_user_func($listener, $event);
             }
         }
     }

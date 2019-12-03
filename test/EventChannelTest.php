@@ -1,6 +1,8 @@
 <?php /** @noinspection PhpUnusedParameterInspection */
+namespace Stk2k\EventStream\Test;
 
 use PHPUnit\Framework\TestCase;
+use Stk2k\EventStream\Event;
 use Stk2k\EventStream\EventChannel;
 use Stk2k\EventStream\EventSourceInterface;
 use Stk2k\EventStream\Emitter\SimpleEventEmitter;
@@ -13,21 +15,23 @@ class EventChannelTestEventSource implements EventSourceInterface
     public function __construct() {
         $this->numbers = ['one', 'two', 'three'];
     }
-    public function canPush(string $event) {
+    public function canPush() : bool {
         return true;
     }
-    public function push(string $event, $args=null) {
-        if ($event==='number'){
-            $this->numbers[] = $args;
+    public function push(Event $event) : EventSourceInterface {
+        if ($event->getName() === 'number'){
+            $this->numbers[] = $event->getPayload();
         }
         return $this;
     }
     public function next() {
-        $number = array_shift($this->numbers);
-        return $number ? ['number',$number] : null;
+        if (empty($this->numbers)){
+            return false;
+        }
+        return new Event('number', array_shift($this->numbers));
     }
-    public function listEents() {
-        return array_values($this->numbers);
+    public function listStoredNumbers() {
+        return $this->numbers;
     }
 }
 
@@ -68,9 +72,9 @@ class EventChannelTest extends TestCase
         $es = new EventChannel();
         $es->source($source=new EventChannelTestEventSource);
         
-        $es->push('number', 'four');
+        $es->push(new Event('number', 'four'));
         
-        $events = $source->listEents();
+        $events = $source->listStoredNumbers();
         
         $this->assertEquals( 4, count($events) );
         $this->assertEquals( 'one', reset($events) );
@@ -82,7 +86,7 @@ class EventChannelTest extends TestCase
         $es->emitter(new SimpleEventEmitter);
         $es->source($source=new EventChannelTestEventSource);
     
-        $events = $source->listEents();
+        $events = $source->listStoredNumbers();
     
         $this->assertEquals( 3, count($events) );
         $this->assertEquals( 'one', reset($events) );
@@ -90,7 +94,7 @@ class EventChannelTest extends TestCase
         
         $es->flush();
         
-        $events = $source->listEents();
+        $events = $source->listStoredNumbers();
         
         $this->assertEquals( 0, count($events) );
         $this->assertFalse( reset($events) );
@@ -98,17 +102,17 @@ class EventChannelTest extends TestCase
     }
     public function testListen()
     {
-        $numbers = array();
-        $fruits = array();
+        $numbers = [];
+        $fruits = [];
         
         $es = new EventChannel();
         $es->emitter($emitter=new SimpleEventEmitter);
         $es->source($source=new EventChannelTestEventSource);
-        $es->listen('number',function($_, $arg) use(&$numbers) {
-            $numbers[] = $arg;
+        $es->listen('number',function(Event $event) use(&$numbers) {
+            $numbers[] = $event->getPayload();
         });
-        $es->listen('fruits',function($_, $arg) use(&$fruits) {
-            $fruits[] = $arg;
+        $es->listen('fruits',function(Event $event) use(&$fruits) {
+            $fruits[] = $event->getPayload();
         });
         $es->flush();
     

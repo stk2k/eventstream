@@ -1,10 +1,11 @@
 <?php
-require 'include/autoload.php';
+require dirname(__DIR__) . '/vendor/autoload.php';
 
 use Stk2k\EventStream\EventStream;
 use Stk2k\EventStream\EventSourceInterface;
 use Stk2k\EventStream\Emitter\WildCardEventEmitter;
 use Stk2k\EventStream\Exception\EventSourceIsNotPushableException;
+use Stk2k\EventStream\Event;
 
 class WildCardEventSource implements EventSourceInterface
 {
@@ -12,19 +13,19 @@ class WildCardEventSource implements EventSourceInterface
     
     public function __construct() {
         $this->events = [
-            ['hotel.name', 'Tiger Hotel'],
-            ['hotel.address', 'Tokyo'],
-            ['hotel.phone_number', '0123456789'],
-            ['user.name', 'satou tarou'],
-            ['user.phone_number', '987654321'],
-            ['user.address', 'Fukuoka'],
+            new Event('hotel.name', 'Tiger Hotel'),
+            new Event('hotel.address', 'Tokyo'),
+            new Event('hotel.phone_number', '0123456789'),
+            new Event('user.name', 'satou tarou'),
+            new Event('user.phone_number', '987654321'),
+            new Event('user.address', 'Fukuoka'),
         ];
     }
-    public function canPush(string $event) {
+    public function canPush() : bool {
         return true;
     }
-    public function push(string $event, $args=null) {
-        $this->events[] = [$event, $args];
+    public function push(Event $e) : EventSourceInterface {
+        $this->events[] = $e;
         return $this;
     }
     public function next() {
@@ -32,21 +33,21 @@ class WildCardEventSource implements EventSourceInterface
     }
 }
   
-// listen only fruits and animal
+// listen only user events
 try{
     (new EventStream())
         ->channel('my channel', new WildCardEventSource(), new WildCardEventEmitter())
-        ->listen('user.*', function($event, $args){
-            echo 'received ' . $event . '='.$args, PHP_EOL;
+        ->listen('user.*', function(Event $e){
+            echo 'received ' . $e->getName() . '='.$e->getPayload(), PHP_EOL;
         })
-        ->listen('*.address', function($event, $args){
-            echo 'received ' . $event . '='.$args, PHP_EOL;
+        ->listen('*.address', function(Event $e){
+            echo 'received ' . $e->getName() . '='.$e->getPayload(), PHP_EOL;
         })
-        ->push('user.age', 21)
+        ->push(new Event('user.age', 21))
         ->flush();
 }
 catch(EventSourceIsNotPushableException $e){
-    echo 'Event not publishable: ' . $e->getMessage() . ' event: ' . $e->getEvent();
+    echo 'Event not publishable.';
 }
 
 // received hotel.address=Tokyo

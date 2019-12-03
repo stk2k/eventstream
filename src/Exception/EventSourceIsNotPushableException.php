@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Stk2k\EventStream\Exception;
 
 use Exception;
@@ -6,38 +8,14 @@ use Throwable;
 
 class EventSourceIsNotPushableException extends Exception
 {
-    private $event;
-    private $args;
-
     /**
      * EventSourceIsNotPushableException constructor.
      *
-     * @param string $message
-     * @param string $event
-     * @param mixed $args
-     * @param Throwable|null $previous
+     * @param int $code
+     * @param Throwable|null $prev
      */
-    public function __construct(string $message, string $event, $args, Throwable $previous = null)
+    public function __construct(int $code = 0, Throwable $prev = null)
     {
-        parent::__construct($message, 0, $previous);
-
-        $this->event = $event;
-        $this->args = $args;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEvent()
-    {
-        return $this->event;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getArgs()
-    {
-        return $this->args;
+        parent::__construct('Event source is not pushable.', $code, $prev);
     }
 }

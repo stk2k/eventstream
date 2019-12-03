@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Stk2k\EventStream;
 
 use \RuntimeException;
@@ -80,20 +82,19 @@ class EventChannel
     /**
      * store event
      *
-     * @param string $event
-     * @param mixed $args
+     * @param Event $event
      *
      * @return EventChannel
      *
      * @throws EventSourceIsNotPushableException, OverflowException
      */
-    public function push(string $event, $args = null) : self
+    public function push(Event $event) : self
     {
         if ($this->source){
-            if (!$this->source->canPush($event)){
-                throw new EventSourceIsNotPushableException('Event source is full', $event, $args);
+            if (!$this->source->canPush()){
+                throw new EventSourceIsNotPushableException();
             }
-            $this->source->push($event, $args);
+            $this->source->push($event);
             if ($this->auto_flush){
                 $this->flush();
             }
@@ -111,15 +112,11 @@ class EventChannel
             return $this;
         }
         while($e = $this->source->next()){
-            if (is_string($e)){
+            if ($e instanceof Event){
                 $this->emitter->emit($e);
             }
-            elseif (is_array($e) && count($e)===2){
-                list($event, $args) = $e;
-                $this->emitter->emit($event, $args);
-            }
-            elseif ($e!==null){
-                throw new RuntimeException('datasource returns invalid event:' . print_r($e,true));
+            else{
+                throw new RuntimeException('event source returns invalid event:' . print_r($e,true));
             }
         }
         return $this;

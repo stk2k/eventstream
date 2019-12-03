@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Stk2k\EventStream;
 
 interface EventEmitterInterface
@@ -22,8 +24,7 @@ interface EventEmitterInterface
     /**
      * emit event
      *
-     * @param string $event
-     * @param mixed $args
+     * @param Event $event
      */
-    public function emit(string $event, $args = null);
+    public function emit(Event $event);
 }

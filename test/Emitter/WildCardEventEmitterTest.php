@@ -1,7 +1,9 @@
 <?php
+namespace Stk2k\EventStream\Test;
 
 use PHPUnit\Framework\TestCase;
 use Stk2k\EventStream\Emitter\WildCardEventEmitter;
+use Stk2k\EventStream\Event;
 
 class WildCardEventEmitterTest extends TestCase
 {
@@ -40,148 +42,127 @@ class WildCardEventEmitterTest extends TestCase
     public function testEmit()
     {
         $emitter = new WildCardEventEmitter();
-        
-        
-        // prefix match
-        $events = [];
-        $args = [];
-        $emitter->listen('*oo', function($event, $arg) use(&$events, &$args){ $events[] = $event; $args[] = $arg; });
 
-        $this->assertEquals([], $events );
-        $this->assertEquals([], $args );
-    
-        $emitter->emit('bar', 'banana');
-        $this->assertEquals([], $events );
-        $this->assertEquals([], $args );
-    
-        $emitter->emit('foo', 'apple');
-        $this->assertEquals(['foo'], $events );
-        $this->assertEquals(['apple'], $args );
-    
-        $emitter->emit('foa', 'orange');
-        $this->assertEquals(['foo'], $events );
-        $this->assertEquals(['apple'], $args );
-    
-        $emitter->emit('fo', 'kiwi');
-        $this->assertEquals(['foo'], $events );
-        $this->assertEquals(['apple'], $args );
-    
-        $emitter->emit('fao', 'peach');
-        $this->assertEquals(['foo'], $events );
-        $this->assertEquals(['apple'], $args );
-    
-        $emitter->emit('_foo', 'pear');
-        $this->assertEquals(['foo', '_foo'], $events );
-        $this->assertEquals(['apple', 'pear'], $args );
-        
-        $emitter->emit('oo', 'melon');
-        $this->assertEquals(['foo', '_foo', 'oo'], $events );
-        $this->assertEquals(['apple', 'pear', 'melon'], $args );
+        // prefix match
+        $emitter->listen('*oo', function($event) use(&$event_received){ $event_received = $event; });
+
+        $event_received = null;
+        $emitter->emit(new Event('bar', 'banana'));
+        $this->assertNull($event_received);
+
+        $event_received = null;
+        $emitter->emit(new Event('foo', 'apple'));
+        $this->assertEquals(new Event('foo','apple'), $event_received );
+
+        $event_received = null;
+        $emitter->emit(new Event('foa', 'orange'));
+        $this->assertNull($event_received);
+
+        $event_received = null;
+        $emitter->emit(new Event('fo', 'kiwi'));
+        $this->assertNull($event_received);
+
+        $event_received = null;
+        $emitter->emit(new Event('fao', 'peach'));
+        $this->assertNull($event_received);
+
+        $event_received = null;
+        $emitter->emit(new Event('_foo', 'pear'));
+        $this->assertEquals(new Event('_foo', 'pear'), $event_received );
+
+        $event_received = null;
+        $emitter->emit(new Event('oo', 'melon'));
+        $this->assertEquals(new Event('oo', 'melon'), $event_received );
     
         $emitter->unlisten();
     
         // suffix match
-        $events = [];
-        $args = [];
-        $emitter->listen('fo*', function($event, $arg) use(&$events, &$args){ $events[] = $event; $args[] = $arg; });
+        $emitter->listen('fo*', function($event) use(&$event_received){ $event_received = $event; });
 
-        $this->assertEquals([], $events );
-        $this->assertEquals([], $args );
-    
-        $emitter->emit('bar', 'banana');
-        $this->assertEquals([], $events );
-        $this->assertEquals([], $args );
-    
-        $emitter->emit('foo', 'apple');
-        $this->assertEquals(['foo'], $events );
-        $this->assertEquals(['apple'], $args );
-    
-        $emitter->emit('foa', 'orange');
-        $this->assertEquals(['foo', 'foa'], $events );
-        $this->assertEquals(['apple', 'orange'], $args );
-    
-        $emitter->emit('fo', 'kiwi');
-        $this->assertEquals(['foo', 'foa', 'fo'], $events );
-        $this->assertEquals(['apple', 'orange', 'kiwi'], $args );
-    
-        $emitter->emit('fao', 'peach');
-        $this->assertEquals(['foo', 'foa', 'fo'], $events );
-        $this->assertEquals(['apple', 'orange', 'kiwi'], $args );
-    
-        $emitter->emit('_foo', 'pear');
-        $this->assertEquals(['foo', 'foa', 'fo'], $events );
-        $this->assertEquals(['apple', 'orange', 'kiwi'], $args );
-        
-        $emitter->emit('oo', 'melon');
-        $this->assertEquals(['foo', 'foa', 'fo'], $events );
-        $this->assertEquals(['apple', 'orange', 'kiwi'], $args );
+        $event_received = null;
+        $emitter->emit(new Event('bar', 'banana'));
+        $this->assertNull($event_received);
+
+        $event_received = null;
+        $emitter->emit(new Event('foo', 'apple'));
+        $this->assertEquals(new Event('foo', 'apple'), $event_received );
+
+        $event_received = null;
+        $emitter->emit(new Event('foa', 'orange'));
+        $this->assertEquals(new Event('foa', 'orange'), $event_received );
+
+        $event_received = null;
+        $emitter->emit(new Event('fo', 'kiwi'));
+        $this->assertEquals(new Event('fo', 'kiwi'), $event_received );
+
+        $event_received = null;
+        $emitter->emit(new Event('fao', 'peach'));
+        $this->assertNull($event_received);
+
+        $event_received = null;
+        $emitter->emit(new Event('_foo', 'pear'));
+        $this->assertNull($event_received);
+
+        $event_received = null;
+        $emitter->emit(new Event('oo', 'melon'));
+        $this->assertNull($event_received);
     
         $emitter->unlisten();
     
         // partial match
-        $events = [];
-        $args = [];
-        $emitter->listen('f*o', function($event, $arg) use(&$events, &$args){ $events[] = $event; $args[] = $arg; });
+        $emitter->listen('f*o', function($event) use(&$event_received){ $event_received = $event; });
 
-        $this->assertEquals([], $events );
-        $this->assertEquals([], $args );
-        
-        $emitter->emit('bar', 'banana');
-        $this->assertEquals([], $events );
-        $this->assertEquals([], $args );
-        
-        $emitter->emit('foo', 'apple');
-        $this->assertEquals(['foo'], $events );
-        $this->assertEquals(['apple'], $args );
-    
-        $emitter->emit('foa', 'orange');
-        $this->assertEquals(['foo'], $events );
-        $this->assertEquals(['apple'], $args );
-    
-        $emitter->emit('fo', 'kiwi');
-        $this->assertEquals(['foo', 'fo'], $events );
-        $this->assertEquals(['apple', 'kiwi'], $args );
-    
-        $emitter->emit('fao', 'peach');
-        $this->assertEquals(['foo', 'fo', 'fao'], $events );
-        $this->assertEquals(['apple', 'kiwi', 'peach'], $args );
-    
-        $emitter->emit('_foo', 'pear');
-        $this->assertEquals(['foo', 'fo', 'fao'], $events );
-        $this->assertEquals(['apple', 'kiwi', 'peach'], $args );
+        $event_received = null;
+        $emitter->emit(new Event('bar', 'banana'));
+        $this->assertNull($event_received);
+
+        $event_received = null;
+        $emitter->emit(new Event('foo', 'apple'));
+        $this->assertEquals(new Event('foo', 'apple'), $event_received );
+
+        $event_received = null;
+        $emitter->emit(new Event('foa', 'orange'));
+        $this->assertNull($event_received);
+
+        $event_received = null;
+        $emitter->emit(new Event('fo', 'kiwi'));
+        $this->assertEquals(new Event('fo', 'kiwi'), $event_received );
+
+        $event_received = null;
+        $emitter->emit(new Event('fao', 'peach'));
+        $this->assertEquals(new Event('fao', 'peach'), $event_received );
+
+        $event_received = null;
+        $emitter->emit(new Event('_foo', 'pear'));
+        $this->assertNull($event_received);
     
         $emitter->unlisten();
     
         // multiple wildcards
-        $events = [];
-        $args = [];
-        $emitter->listen('*.*', function($event, $arg) use(&$events, &$args){ $events[] = $event; $args[] = $arg; });
+        $emitter->listen('*.*', function($event) use(&$event_received){ $event_received = $event; });
 
-        $this->assertEquals([], $events );
-        $this->assertEquals([], $args );
-    
-        $emitter->emit('taxi.driver', 'banana');
-        $this->assertEquals(['taxi.driver'], $events );
-        $this->assertEquals(['banana'], $args );
-    
-        $emitter->emit('taxi-driver', 'apple');
-        $this->assertEquals(['taxi.driver'], $events );
-        $this->assertEquals(['banana'], $args );
-    
-        $emitter->emit('water.melon', 'orange');
-        $this->assertEquals(['taxi.driver', 'water.melon'], $events );
-        $this->assertEquals(['banana', 'orange'], $args );
-    
-        $emitter->emit('david walks around.', 'kiwi');
-        $this->assertEquals(['taxi.driver', 'water.melon', 'david walks around.'], $events );
-        $this->assertEquals(['banana', 'orange', 'kiwi'], $args );
-    
-        $emitter->emit('..', 'peach');
-        $this->assertEquals(['taxi.driver', 'water.melon', 'david walks around.', '..'], $events );
-        $this->assertEquals(['banana', 'orange', 'kiwi', 'peach'], $args );
-    
-        $emitter->emit('fruits', 'pear');
-        $this->assertEquals(['taxi.driver', 'water.melon', 'david walks around.', '..'], $events );
-        $this->assertEquals(['banana', 'orange', 'kiwi', 'peach'], $args );
+        $event_received = null;
+        $emitter->emit(new Event('taxi.driver', 'banana'));
+        $this->assertEquals(new Event('taxi.driver', 'banana'), $event_received );
+
+        $event_received = null;
+        $emitter->emit(new Event('taxi-driver', 'apple'));
+        $this->assertNull($event_received);
+
+        $event_received = null;
+        $emitter->emit(new Event('water.melon', 'orange'));
+        $this->assertEquals(new Event('water.melon', 'orange'), $event_received );
+
+        $event_received = null;
+        $emitter->emit(new Event('david walks around.', 'kiwi'));
+        $this->assertEquals(new Event('david walks around.', 'kiwi'), $event_received );
+
+        $event_received = null;
+        $emitter->emit(new Event('..', 'peach'));
+        $this->assertEquals(new Event('..', 'peach'), $event_received );
+
+        $event_received = null;
+        $emitter->emit(new Event('fruits', 'pear'));
+        $this->assertNull($event_received);
     }
 }

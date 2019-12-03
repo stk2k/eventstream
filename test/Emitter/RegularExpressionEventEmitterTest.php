@@ -1,7 +1,9 @@
 <?php
+namespace Stk2k\EventStream\Test;
 
 use PHPUnit\Framework\TestCase;
 use Stk2k\EventStream\Emitter\RegularExpressionEventEmitter;
+use \Stk2k\EventStream\Event;
 
 class RegularExpressionEventEmitterTest extends TestCase
 {
@@ -10,104 +12,84 @@ class RegularExpressionEventEmitterTest extends TestCase
         $emitter = new RegularExpressionEventEmitter();
         
         // simple
-        $events = [];
-        $args = [];
-        $emitter->listen('/foo/', function($event, $arg) use(&$events, &$args){ $events[] = $event; $args[] = $arg; });
-    
-        $this->assertEquals([], $events );
-        $this->assertEquals([], $args );
-    
-        $emitter->emit('bar', 'banana');
-        $this->assertEquals([], $events );
-        $this->assertEquals([], $args );
-    
-        $emitter->emit('foo', 'apple');
-        $this->assertEquals(['foo'], $events );
-        $this->assertEquals(['apple'], $args );
+        $emitter->listen('/foo/', function($event) use(&$event_received){ $event_received = $event; });
+
+        $event_received = null;
+        $emitter->emit(new Event('bar', 'banana'));
+        $this->assertNull($event_received);
+
+        $event_received = null;
+        $emitter->emit(new Event('foo', 'apple'));
+        $this->assertEquals(new Event('foo', 'apple'), $event_received );
     
         $emitter->unlisten();
     
         // prefix match
-        $events = [];
-        $args = [];
-        $emitter->listen('/^f.*$/', function($event, $arg) use(&$events, &$args){ $events[] = $event; $args[] = $arg; });
+        $emitter->listen('/^f.*$/', function($event) use(&$event_received){ $event_received = $event; });
 
-        $this->assertEquals([], $events );
-        $this->assertEquals([], $args );
-    
-        $emitter->emit('bar', 'banana');
-        $this->assertEquals([], $events );
-        $this->assertEquals([], $args );
-    
-        $emitter->emit('foo', 'apple');
-        $this->assertEquals(['foo'], $events );
-        $this->assertEquals(['apple'], $args );
-    
-        $emitter->emit('fat', 'orange');
-        $this->assertEquals(['foo', 'fat'], $events );
-        $this->assertEquals(['apple', 'orange'], $args );
+        $event_received = null;
+        $emitter->emit(new Event('bar', 'banana'));
+        $this->assertNull($event_received);
+
+        $event_received = null;
+        $emitter->emit(new Event('foo', 'apple'));
+        $this->assertEquals(new Event('foo', 'apple'), $event_received );
+
+        $event_received = null;
+        $emitter->emit(new Event('fat', 'orange'));
+        $this->assertEquals(new Event('fat', 'orange'), $event_received );
     
         $emitter->unlisten();
     
     
         // suffix match
-        $events = [];
-        $args = [];
-        $emitter->listen('/^.*oo$/', function($event, $arg) use(&$events, &$args){ $events[] = $event; $args[] = $arg; });
+        $emitter->listen('/^.*oo$/', function($event) use(&$event_received){ $event_received = $event; });
 
-        $this->assertEquals([], $events );
-        $this->assertEquals([], $args );
-    
-        $emitter->emit('bar', 'banana');
-        $this->assertEquals([], $events );
-        $this->assertEquals([], $args );
-    
-        $emitter->emit('foo', 'apple');
-        $this->assertEquals(['foo'], $events );
-        $this->assertEquals(['apple'], $args );
-    
-        $emitter->emit('zoo', 'orange');
-        $this->assertEquals(['foo', 'zoo'], $events );
-        $this->assertEquals(['apple', 'orange'], $args );
-    
-        $emitter->emit('foo_', 'kiwi');
-        $this->assertEquals(['foo', 'zoo'], $events );
-        $this->assertEquals(['apple', 'orange'], $args );
+        $event_received = null;
+        $emitter->emit(new Event('bar', 'banana'));
+        $this->assertNull($event_received);
+
+        $event_received = null;
+        $emitter->emit(new Event('foo', 'apple'));
+        $this->assertEquals(new Event('foo', 'apple'), $event_received );
+
+        $event_received = null;
+        $emitter->emit(new Event('zoo', 'orange'));
+        $this->assertEquals(new Event('zoo', 'orange'), $event_received );
+
+        $event_received = null;
+        $emitter->emit(new Event('foo_', 'kiwi'));
+        $this->assertNull($event_received);
     
         $emitter->unlisten();
     
     
         // partial match
-        $events = [];
-        $args = [];
-        $emitter->listen('/^f.*o$/', function($event, $arg) use(&$events, &$args){ $events[] = $event; $args[] = $arg; });
+        $emitter->listen('/^f.*o$/', function($event) use(&$event_received){ $event_received = $event; });
 
-        $this->assertEquals([], $events );
-        $this->assertEquals([], $args );
-    
-        $emitter->emit('bar', 'banana');
-        $this->assertEquals([], $events );
-        $this->assertEquals([], $args );
-    
-        $emitter->emit('foo', 'apple');
-        $this->assertEquals(['foo'], $events );
-        $this->assertEquals(['apple'], $args );
-    
-        $emitter->emit('zoo', 'orange');
-        $this->assertEquals(['foo'], $events );
-        $this->assertEquals(['apple'], $args );
-    
-        $emitter->emit('foo_', 'kiwi');
-        $this->assertEquals(['foo'], $events );
-        $this->assertEquals(['apple'], $args );
-    
-        $emitter->emit('falao', 'peach');
-        $this->assertEquals(['foo', 'falao'], $events );
-        $this->assertEquals(['apple', 'peach'], $args );
-    
-        $emitter->emit('fo', 'pear');
-        $this->assertEquals(['foo', 'falao', 'fo'], $events );
-        $this->assertEquals(['apple', 'peach', 'pear'], $args );
+        $event_received = null;
+        $emitter->emit(new Event('bar', 'banana'));
+        $this->assertNull($event_received);
+
+        $event_received = null;
+        $emitter->emit(new Event('foo', 'apple'));
+        $this->assertEquals(new Event('foo', 'apple'), $event_received );
+
+        $event_received = null;
+        $emitter->emit(new Event('zoo', 'orange'));
+        $this->assertNull($event_received);
+
+        $event_received = null;
+        $emitter->emit(new Event('foo_', 'kiwi'));
+        $this->assertNull($event_received);
+
+        $event_received = null;
+        $emitter->emit(new Event('falao', 'peach'));
+        $this->assertEquals(new Event('falao', 'peach'), $event_received );
+
+        $event_received = null;
+        $emitter->emit(new Event('fo', 'pear'));
+        $this->assertEquals(new Event('fo', 'pear'), $event_received );
     
         $emitter->unlisten();
     }

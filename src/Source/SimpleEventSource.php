@@ -1,50 +1,40 @@
 <?php
+declare(strict_types=1);
+
 namespace Stk2k\EventStream\Source;
 
+use Stk2k\EventStream\Event;
 use Stk2k\EventStream\EventSourceInterface;
 
 class SimpleEventSource implements EventSourceInterface
 {
-    /** @var array */
+    /** @var Event[] */
     private $queue;
 
     /**
-     * check if event source can be pushed a event
-     *
-     * @param string $event
-     *
-     * @return bool     true if pushable, false if the event store can not be pushed
+     * {@inheritDoc}
      */
-    public function canPush(string $event) : bool
+    public function canPush() : bool
     {
         return true;
     }
 
     /**
-     * store event
-     *
-     * @param string $event
-     * @param mixed $args
-     *
-     * @return EventSourceInterface
+     * {@inheritDoc}
      */
-    public function push(string $event, $args=null) : EventSourceInterface
+    public function push(Event $event) : EventSourceInterface
     {
-        $this->queue[] = [
-            $event, $args
-        ];
+        $this->queue[] = $event;
         return $this;
     }
 
     /**
-     * generate next event
-     *
-     * @return array|string|null       array($event, $args) or $event or null if no events remain in event source.
+     * {@inheritDoc}
      */
     public function next()
     {
         if (empty($this->queue)){
-            return null;
+            return false;
         }
         return array_shift($this->queue);
     }

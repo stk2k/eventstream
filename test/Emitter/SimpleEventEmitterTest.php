@@ -1,7 +1,9 @@
 <?php
+namespace Stk2k\EventStream\Test;
 
 use PHPUnit\Framework\TestCase;
 use Stk2k\EventStream\Emitter\SimpleEventEmitter;
+use Stk2k\EventStream\Event;
 
 function create_test_listener()
 {
@@ -89,19 +91,13 @@ class SimpleEventEmitterTest extends TestCase
     {
         $emitter = new SimpleEventEmitter();
 
-        $events = [];
-        $args = [];
-        $emitter->listen('foo', function($event, $arg) use(&$events, &$args){ $events[] = $event; $args[] = $arg; });
+        $emitter->listen('foo', function($event) use(&$event_received){ $event_received = $event; });
 
-        $this->assertEquals([], $events );
-        $this->assertEquals([], $args );
-        
-        $emitter->emit('bar', 'banana');
-        $this->assertEquals([], $events );
-        $this->assertEquals([], $args );
+        $event_received = null;
+        $emitter->emit(new Event('bar', 'banana'));
+        $this->assertNull($event_received);
     
-        $emitter->emit('foo', 'banana');
-        $this->assertEquals(['foo'], $events );
-        $this->assertEquals(['banana'], $args );
+        $emitter->emit(new Event('foo', 'banana'));
+        $this->assertEquals(new Event('foo', 'banana'), $event_received );
     }
 }
