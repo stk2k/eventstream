@@ -5,9 +5,9 @@ namespace stk2k\eventstream;
 
 use \RuntimeException;
 
-use stk2k\eventstream\Emitter\SimpleEventEmitter;
-use stk2k\eventstream\Exception\EventSourceIsNotPushableException;
-use stk2k\eventstream\Source\SimpleEventSource;
+use stk2k\eventstream\emitter\SimpleEventEmitter;
+use stk2k\eventstream\exception\EventSourceIsNotPushableException;
+use stk2k\eventstream\source\SimpleEventSource;
 
 class EventChannel
 {

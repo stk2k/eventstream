@@ -7,8 +7,8 @@ use PHPUnit\Framework\TestCase;
 use stk2k\eventstream\Event;
 use stk2k\eventstream\EventChannel;
 use stk2k\eventstream\EventSourceInterface;
-use stk2k\eventstream\Emitter\SimpleEventEmitter;
-use stk2k\eventstream\Source\SimpleEventSource;
+use stk2k\eventstream\emitter\SimpleEventEmitter;
+use stk2k\eventstream\source\SimpleEventSource;
 
 class EventChannelTestEventSource implements EventSourceInterface
 {

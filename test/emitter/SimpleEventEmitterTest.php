@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace stk2k\eventstream\test\emitter;
 
 use PHPUnit\Framework\TestCase;
-use stk2k\eventstream\Emitter\SimpleEventEmitter;
+use stk2k\eventstream\emitter\SimpleEventEmitter;
 use stk2k\eventstream\Event;
 
 function create_test_listener() : callable
