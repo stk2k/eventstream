@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace stk2k\EventStream\Source;
+namespace stk2k\eventstream\source;
 
-use stk2k\EventStream\Event;
-use stk2k\EventStream\EventSourceInterface;
+use stk2k\eventstream\Event;
+use stk2k\eventstream\EventSourceInterface;
 
 class SimpleEventSource implements EventSourceInterface
 {

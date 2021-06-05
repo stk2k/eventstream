@@ -1,12 +1,14 @@
 <?php /** @noinspection PhpUnusedParameterInspection */
-namespace stk2k\EventStream\Test;
+declare(strict_types=1);
+
+namespace stk2k\eventstream\test;
 
 use PHPUnit\Framework\TestCase;
-use stk2k\EventStream\Event;
-use stk2k\EventStream\EventChannel;
-use stk2k\EventStream\EventSourceInterface;
-use stk2k\EventStream\Emitter\SimpleEventEmitter;
-use stk2k\EventStream\Source\SimpleEventSource;
+use stk2k\eventstream\Event;
+use stk2k\eventstream\EventChannel;
+use stk2k\eventstream\EventSourceInterface;
+use stk2k\eventstream\Emitter\SimpleEventEmitter;
+use stk2k\eventstream\Source\SimpleEventSource;
 
 class EventChannelTestEventSource implements EventSourceInterface
 {

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace stk2k\EventStream;
+namespace stk2k\eventstream;
 
-use stk2k\EventStream\Exception\EventSourceIsNotPushableException;
+use stk2k\eventstream\Exception\EventSourceIsNotPushableException;
 
 /**
  * Event source interface

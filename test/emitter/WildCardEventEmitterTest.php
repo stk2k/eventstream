@@ -1,9 +1,11 @@
 <?php
-namespace stk2k\EventStream\Test;
+declare(strict_types=1);
+
+namespace stk2k\eventstream\test\emitter;
 
 use PHPUnit\Framework\TestCase;
-use stk2k\EventStream\Emitter\WildCardEventEmitter;
-use stk2k\EventStream\Event;
+use stk2k\eventstream\Emitter\WildCardEventEmitter;
+use stk2k\eventstream\Event;
 
 class WildCardEventEmitterTest extends TestCase
 {

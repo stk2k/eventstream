@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace stk2k\EventStream\Emitter;
+namespace stk2k\eventstream\emitter;
 
-use stk2k\EventStream\Event;
-use stk2k\EventStream\EventEmitterInterface;
+use stk2k\eventstream\Event;
+use stk2k\eventstream\EventEmitterInterface;
 
 class SimpleEventEmitter implements EventEmitterInterface
 {

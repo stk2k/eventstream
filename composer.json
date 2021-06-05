@@ -21,12 +21,12 @@
   },
   "autoload": {
     "psr-4": {
-      "stk2k\\EventStream\\": "src/"
+      "stk2k\\eventstream\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "stk2k\\EventStream\\Test\\": "test/"
+      "stk2k\\eventstream\\test\\": "test/"
     }
   }
 }
