@@ -33,10 +33,10 @@ use Emitter/SimpleEventEmitter class for normal use, and pass it to EventStream#
 ### 01. event source
 
 ```php
-use EventStream\EventStream;
-use EventStream\EventSourceInterface;
-use EventStream\Emitter\SimpleEventEmitter;
-use EventStream\Exception\EventSourceIsNotPushableException;
+use stk2k\eventstream\EventStream;
+use stk2k\eventstream\EventSourceInterface;
+use stk2k\eventstream\emitter\SimpleEventEmitter;
+use stk2k\eventstream\exception\EventSourceIsNotPushableException;
 use Stk2k\EventStream\Event;
 
 class NumberEventSource implements EventSourceInterface
