@@ -13,15 +13,20 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "php": ">=7.1"
+    "php": ">=7.2"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6.3.0",
+    "phpunit/phpunit": "^8.5.15",
     "php-coveralls/php-coveralls": "^2.0"
   },
   "autoload": {
     "psr-4": {
-      "Stk2k\\EventStream\\": "src/"
+      "stk2k\\EventStream\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "stk2k\\EventStream\\Test\\": "test/"
     }
   }
 }

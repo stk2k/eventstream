@@ -1,9 +1,9 @@
 <?php
-namespace Stk2k\EventStream\Test;
+namespace stk2k\EventStream\Test;
 
 use PHPUnit\Framework\TestCase;
-use Stk2k\EventStream\Emitter\RegularExpressionEventEmitter;
-use \Stk2k\EventStream\Event;
+use stk2k\EventStream\Emitter\RegularExpressionEventEmitter;
+use stk2k\EventStream\Event;
 
 class RegularExpressionEventEmitterTest extends TestCase
 {

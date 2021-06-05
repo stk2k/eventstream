@@ -134,7 +134,7 @@ catch(EventSourceIsNotPushableException $e){
 
 ## Requirement
 
-PHP 7.1 or later
+PHP 7.2 or later
 
 ## Installing stk2k/eventstream
 

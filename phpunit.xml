@@ -15,7 +15,7 @@
          stopOnIncomplete="false"
          stopOnSkipped="false"
          stopOnRisky="false"
-         bootstrap="test/bootstrap.php"
+         bootstrap="vendor/autoload.php"
 >
     <testsuites>
         <testsuite name="EventStream Tests">
@@ -27,16 +27,18 @@
         <whitelist>
             <directory suffix=".php">./src</directory>
             <exclude>
-                <directory>./demo</directory>
+                <directory>./test</directory>
                 <directory>./vendor</directory>
                 <directory suffix="Interface.php">./src</directory>
             </exclude>
         </whitelist>
     </filter>
 
-    <filter>
-        <whitelist>
-            <directory>./src/</directory>
-        </whitelist>
-    </filter>
+    <logging>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="coverage-html" target="coverage" title="PHPUnit"
+             charset="UTF-8" yui="true" highlight="true"
+             lowUpperBound="35" highLowerBound="90"/>
+    </logging>
 </phpunit>

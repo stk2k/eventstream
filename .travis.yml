@@ -1,18 +1,20 @@
 language: php
 
 php:
-  - 7.1
   - 7.2
   - 7.3
+  - 7.4
+  - 8.0
 
 before_script:
-  - composer install --no-interaction
+  - phpenv config-add .travis.php.ini
+  - composer install
 
 script:
   - echo $(phpenv version-name)
-  - curl -sSfL -o ~/.phpenv/versions/$(phpenv version-name)/bin/phpunit https://phar.phpunit.de/phpunit-6.5.9.phar
+  - curl -sSfL -o ~/.phpenv/versions/$(phpenv version-name)/bin/phpunit https://phar.phpunit.de/phpunit-8.5.15.phar
   - phpunit --version
-  - phpunit --configuration phpunit.xml
+  - phpunit --configuration phpunit.xml --coverage-clover build/logs/clover.xml
 
 after_script:
   - travis_retry php vendor/bin/php-coveralls -v

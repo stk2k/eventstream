@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Stk2k\EventStream;
+namespace stk2k\EventStream;
 
 use \RuntimeException;
 
-use Stk2k\EventStream\Emitter\SimpleEventEmitter;
-use Stk2k\EventStream\Exception\EventSourceIsNotPushableException;
-use Stk2k\EventStream\Source\SimpleEventSource;
+use stk2k\EventStream\Emitter\SimpleEventEmitter;
+use stk2k\EventStream\Exception\EventSourceIsNotPushableException;
+use stk2k\EventStream\Source\SimpleEventSource;
 
 class EventChannel
 {

@@ -1,11 +1,11 @@
 <?php
-namespace Stk2k\EventStream\Test;
+namespace stk2k\EventStream\Test;
 
 use PHPUnit\Framework\TestCase;
-use Stk2k\EventStream\Emitter\SimpleEventEmitter;
-use Stk2k\EventStream\Event;
+use stk2k\EventStream\Emitter\SimpleEventEmitter;
+use stk2k\EventStream\Event;
 
-function create_test_listener()
+function create_test_listener() : callable
 {
     return function($args){
         var_dump($args);

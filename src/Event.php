@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Stk2k\EventStream;
+namespace stk2k\EventStream;
 
 final class Event
 {

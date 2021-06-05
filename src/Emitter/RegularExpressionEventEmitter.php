@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Stk2k\EventStream\Emitter;
+namespace stk2k\EventStream\Emitter;
 
-use Stk2k\EventStream\Event;
-use Stk2k\EventStream\EventEmitterInterface;
+use stk2k\EventStream\Event;
+use stk2k\EventStream\EventEmitterInterface;
 
 class RegularExpressionEventEmitter extends SimpleEventEmitter implements EventEmitterInterface
 {
